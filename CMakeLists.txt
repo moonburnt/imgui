@@ -7,7 +7,7 @@ project(imgui
 
 option(WITH_STDLIB
     "Compile imgui with 'mist/cpp' helper and include its header"
-    ON
+    OFF
 )
 
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -26,13 +26,10 @@ add_library(imgui STATIC
     imstb_truetype.h
 )
 
-target_include_directories(imgui PUBLIC
-    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
-    "$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
-)
+target_include_directories(imgui PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(IMGUI_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 if (WITH_STDLIB)
     add_subdirectory("misc/cpp")
-    target_link_libraries(imgui PRIVATE IMGUI_STDLIB)
+    target_link_libraries(imgui PUBLIC imgui_stdlib)
 endif()
