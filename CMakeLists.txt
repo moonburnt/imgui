@@ -1,18 +1,18 @@
 cmake_minimum_required(VERSION 3.21)
 
-# set project name and version
 project(imgui
     LANGUAGES CXX
-    VERSION 0.1
+    VERSION 1.89
 )
 
-#set(CMAKE_CXX_STANDARD 17)
-#set(CMAKE_CXX_STANDARD_REQUIRED ON)
+option(WITH_STDLIB
+    "Compile imgui with 'mist/cpp' helper and include its header"
+    ON
+)
+
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_library(imgui STATIC
-    misc/cpp/imgui_stdlib.cpp
-    misc/cpp/imgui_stdlib.h
     imconfig.h
     imgui_demo.cpp
     imgui_draw.cpp
@@ -31,3 +31,8 @@ target_include_directories(imgui PUBLIC
     "$<INSTALL_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
 )
 
+set(IMGUI_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+if (WITH_STDLIB)
+    add_subdirectory("misc/cpp")
+    target_link_libraries(imgui PRIVATE IMGUI_STDLIB)
+endif()
